@@ -8,13 +8,15 @@
 </head>
 <body>
   <section id="top">
-    <h3>POST Status Code Tests</h3>
-    <form id="nameForm" action="/addUser" method="post">
-      <label for="name">Name: </label>
-      <input id="nameField" type="text" name="name" />
-      <label for="age">Age: </label>
-      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
-      <input type="submit" value="Add User" />
+    <h3>Song Playlist API</h3>
+    <form id="songForm" action="/addSong" method="post">
+      <label for="title">Song Title: </label>
+      <input id="titleField" type="text" name="title" />
+      <label for="artist">Song Artist: </label>
+      <input id="artistField" type="text" name="artist" />
+      <label for="songLink">Spotify Link: </label>
+      <input id="linkField" type="text" name="songLink" />
+      <input type="submit" value="Add Song" />
     </form>
     <form id="userForm" action="/getUsers" method="get">
       <select id='urlField'>

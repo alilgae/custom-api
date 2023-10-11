@@ -55,9 +55,11 @@ const handleResponse = (response, method) => {
     const url = form.getAttribute("action");
 
 
-    const name = form.querySelector('#nameField').value;
-    const age = form.querySelector("#ageField").value;
-    const data = `name=${name}&age=${age}`;
+    const title = form.querySelector('#titleField').value;
+    const artist = form.querySelector('#artistField').value;
+    const songLink = form.querySelector('#linkField').value;
+
+    const data = `title=${title}&artist=${artist}&link=${songLink}`;
 
     const response = await fetch(url, { 
       method,
@@ -87,14 +89,14 @@ const handleResponse = (response, method) => {
     });
 
     //get form
-    const nameForm = document.querySelector("#nameForm");
+    const songForm = document.querySelector("#songForm");
 
     //on submit button press 
-    nameForm.addEventListener('submit', (e) => {
+    songForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
       //request handle
-      postData(nameForm);
+      postData(songForm);
 
       return false;
     });

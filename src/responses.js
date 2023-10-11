@@ -1,4 +1,4 @@
-const users = {};
+const songs = {};
 
 // respond with head and body
 const respondJSON = (request, response, status, obj) => {
@@ -14,9 +14,14 @@ const respondJSON = (request, response, status, obj) => {
 const getUsers = (request, response) => {
   // what we're sending back
   const obj = {
-    users,
+    songs,
   };
 
+  return respondJSON(request, response, 200, obj);
+};
+
+const getAllSongs = (request, response, playlist = songs) => {
+  const obj = {songs};
   return respondJSON(request, response, 200, obj);
 };
 
@@ -27,8 +32,8 @@ const updateUsers = (request, response, body) => {
     message: 'Created Successfully',
   };
 
-  if (!body.name || !body.age) {
-    obj.message = 'Name and Age are both required';
+  if (!body.title || !body.artist || !body.link) {
+    obj.message = 'All fields required';
     obj.id = 'missingParams';
     return respondJSON(request, response, 400, obj);
   }
@@ -36,15 +41,16 @@ const updateUsers = (request, response, body) => {
   let statusCode = 204; // successful update - no body sent
 
   // create new user if they don't exist
-  if (!users[body.name]) {
+  if (!songs[body.title]) {
     statusCode = 201;
-    users[body.name] = {};
+    songs[body.title] = {};
   }
 
   // update user
-  const currentUser = users[body.name];
-  currentUser.name = body.name;
-  currentUser.age = body.age;
+  const currentSong = songs[body.title];
+  currentSong.title = body.title;
+  currentSong.artist = body.artist;
+  currentSong.link = body.link;
 
   return respondJSON(request, response, statusCode, obj);
 };
@@ -60,7 +66,7 @@ const notFound = (request, response) => {
 };
 
 module.exports = {
-  getUsers,
+  getAllSongs,
   updateUsers,
   notFound,
 };

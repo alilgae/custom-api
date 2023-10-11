@@ -10,7 +10,7 @@ const urlStruct = {
   '/': html.getIndex,
   '/style.css': html.getCSS,
   '/client.js': html.getJS,
-  '/getUsers': responseHandler.getUsers,
+  '/getUsers': responseHandler.getAllSongs,
   notFound: responseHandler.notFound,
 };
 
@@ -44,8 +44,8 @@ const parseBody = (request, response, callback) => {
 };
 
 const handlePost = (request, response, parsedURL) => {
-  // addUser
-  if (parsedURL.pathname === '/addUser') {
+  // addSong
+  if (parsedURL.pathname === '/addSong') {
     parseBody(request, response, responseHandler.updateUsers);
   }
 };
