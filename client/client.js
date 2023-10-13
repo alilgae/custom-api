@@ -28,6 +28,14 @@ const handleResponse = (response, method) => {
       //display actual data we're getting
       response.json().then(obj => { 
         if(obj.message) content.innerHTML += `<p>${obj.message}</p>`; 
+        else if(obj.songs) {
+          let playlist = "<ol>";
+          for(const [key, value] of Object.entries(obj.songs)) {
+            playlist += `<span class="song"><li>Title: ${value.title}</li><ul><li>Artist: ${value.artist}</li></ul></span>`;
+          }
+          playlist += "</ol>";
+          content.innerHTML += playlist;
+        }
         else content.innerHTML += `<p>${JSON.stringify(obj)}</p>`
       });
     }
