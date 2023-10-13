@@ -29,7 +29,7 @@ const updatePlaylist = (request, response, body) => {
     return respondJSON(request, response, 400, obj);
   }
 
-  let statusCode = 204; // successful update - no body sent
+  let statusCode = 204; // update song - don't create new one
 
   // create new song if it doesn't exist
   if (!songs[body.title]) {
