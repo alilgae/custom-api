@@ -7,10 +7,10 @@ const handleResponse = (response, method) => {
         content.innerHTML = `<b>Success</b>`;
         break;
       case 201:
-        content.innerHTML = `<b>Created</b>`;
+        content.innerHTML = `<b>Song Uploaded</b>`;
         break;
       case 204: 
-        content.innerHTML = '<b>Updated (No Content)</b>';
+        content.innerHTML = '<b>Song Updated</b>';
         break;
       case 400: 
         content.innerHTML = `<b>Bad Request</b>`;
@@ -27,27 +27,30 @@ const handleResponse = (response, method) => {
     if(method !== 'head' && response.status !== 204){
       //display actual data we're getting
       response.json().then(obj => { 
-        if(obj.message) content.innerHTML += `<p>${obj.message}</p>`; 
-        else if(obj.songs) {
+        if(obj.songs) {
           let playlist = "<ol>";
           for(const [key, value] of Object.entries(obj.songs)) {
-            playlist += `<span class="song"><li>Title: ${value.title}</li><ul><li>Artist: ${value.artist}</li></ul></span>`;
+            playlist += `<span class="song">
+            <li>Title: ${value.title}</li><ul>
+            <li>Artist: ${value.artist}</li>
+            <li>Link: ${value.link}</li></ul></span>`;
           }
           playlist += "</ol>";
           content.innerHTML += playlist;
-        }
+        }        
+        else if(obj.message) content.innerHTML += `<p>${obj.message}</p>`; 
         else content.innerHTML += `<p>${JSON.stringify(obj)}</p>`
       });
     }
   }
 
   //async means await keyword is somewhere in this function
-  const requestData = async (userForm) => {
+  const requestData = async (playlistForm) => {
     //what method they have selected - type of request we're making
-    const method = userForm.querySelector("#methodSelect").value;
+    const method = 'GET';
 
     //what url they're looking for
-    const url = userForm.querySelector("#urlField").value;
+    const url = '/getPlaylist';
 
     const response = await fetch(url, { method }); //we know data will be there since we're waiting for it
 
@@ -84,14 +87,14 @@ const handleResponse = (response, method) => {
   
   const init = () => {
     //get form
-    const userForm = document.querySelector("#userForm");
+    const playlistForm = document.querySelector("#playlistForm");
 
     //on submit button press 
-    userForm.addEventListener('submit', (e) => {
+    playlistForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
       //request handle
-      requestData(userForm);
+      requestData(playlistForm);
 
       return false;
     });

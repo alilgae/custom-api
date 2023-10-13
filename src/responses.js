@@ -11,25 +11,16 @@ const respondJSON = (request, response, status, obj) => {
   response.end();
 };
 
-const getUsers = (request, response) => {
-  // what we're sending back
-  const obj = {
-    songs,
-  };
-
-  return respondJSON(request, response, 200, obj);
-};
-
 const getAllSongs = (request, response, playlist = songs) => {
-  const obj = {songs};
+  const obj = { songs: playlist };
   return respondJSON(request, response, 200, obj);
 };
 
 // body - the request itself
-const updateUsers = (request, response, body) => {
+const updatePlaylist = (request, response, body) => {
   // assume missing fields
   const obj = {
-    message: 'Created Successfully',
+    message: `${body.title} by ${body.artist} has been successfully added to your playlist.`,
   };
 
   if (!body.title || !body.artist || !body.link) {
@@ -40,13 +31,13 @@ const updateUsers = (request, response, body) => {
 
   let statusCode = 204; // successful update - no body sent
 
-  // create new user if they don't exist
+  // create new song if it doesn't exist
   if (!songs[body.title]) {
     statusCode = 201;
     songs[body.title] = {};
   }
 
-  // update user
+  // update song
   const currentSong = songs[body.title];
   currentSong.title = body.title;
   currentSong.artist = body.artist;
@@ -67,6 +58,6 @@ const notFound = (request, response) => {
 
 module.exports = {
   getAllSongs,
-  updateUsers,
+  updatePlaylist,
   notFound,
 };
