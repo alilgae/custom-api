@@ -29,7 +29,7 @@ const handleResponse = (response, method) => {
     response.json().then(obj => {
       if (obj.songs) {
         let playlist = "<ol>";
-        for (const [key, value] of Object.entries(obj.songs)) {
+        for (const [key, value] of Object.entries(obj.songs.test)) {
           playlist += `<span class="song">
             <li>Title: ${value.title}</li><ul>
             <li>Artist: ${value.artist}</li>
@@ -58,17 +58,17 @@ const requestData = async (playlistForm) => {
 };
 
 //async means await keyword is somewhere in this function
-const postData = async (form) => {
+const postData = async (songForm) => {
   //what method they have selected - type of request we're making
-  const method = form.getAttribute("method");
+  const method = songForm.getAttribute("method");
 
   //what url they're looking for
-  const url = form.getAttribute("action");
+  const url = songForm.getAttribute("action");
 
 
-  const title = form.querySelector('#titleField').value;
-  const artist = form.querySelector('#artistField').value;
-  const songLink = form.querySelector('#linkField').value;
+  const title = songForm.querySelector('#titleField').value;
+  const artist = songForm.querySelector('#artistField').value;
+  const songLink = songForm.querySelector('#linkField').value;
 
   const data = `title=${title}&artist=${artist}&link=${songLink}`;
 

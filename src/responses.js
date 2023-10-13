@@ -29,19 +29,31 @@ const updatePlaylist = (request, response, body) => {
     return respondJSON(request, response, 400, obj);
   }
 
-  let statusCode = 204; // update song - don't create new one
+  let statusCode = 204; // update don't create new one
+
+  if(!body.playlistName) {
+    body.playlistName = "test";
+  }
+
+  //create a new playlist if it doesn't exist
+  if (!songs[body.playlistName]) {
+    statusCode = 201;
+    songs[body.playlistName] = {};
+  }
 
   // create new song if it doesn't exist
-  if (!songs[body.title]) {
+  if (!songs.test[body.title]) {
     statusCode = 201;
-    songs[body.title] = {};
+    songs.test[body.title] = {};
   }
 
   // update song
-  const currentSong = songs[body.title];
+  const currentSong = songs[body.playlistName][body.title];
   currentSong.title = body.title;
   currentSong.artist = body.artist;
   currentSong.link = body.link;
+
+  console.log(songs);
 
   return respondJSON(request, response, statusCode, obj);
 };
