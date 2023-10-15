@@ -23,6 +23,7 @@ const updatePlaylist = (request, response, body) => {
     message: `${body.title} by ${body.artist} has been successfully added to your playlist.`,
   };
 
+  console.log(body);
   if (!body.title || !body.artist || !body.link) {
     obj.message = 'All fields required';
     obj.id = 'missingParams';
@@ -42,9 +43,9 @@ const updatePlaylist = (request, response, body) => {
   }
 
   // create new song if it doesn't exist
-  if (!songs.test[body.title]) {
+  if (!songs[body.playlistName][body.title]) {
     statusCode = 201;
-    songs.test[body.title] = {};
+    songs[body.playlistName][body.title] = {};
   }
 
   // update song

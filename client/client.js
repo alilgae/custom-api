@@ -23,13 +23,15 @@ const handleResponse = (response, method) => {
       break;
   }
 
+  const playlistName = document.querySelector("#getPlaylists").value;
+
   //if we have a body to parse
   if (method !== 'head' && response.status !== 204) {
     //display actual data we're getting
     response.json().then(obj => {
-      if (obj.songs) {
+      if (obj.songs) { console.log(obj.songs);
         let playlist = "<ol>";
-        for (const [key, value] of Object.entries(obj.songs.test)) {
+        for (const [key, value] of Object.entries(obj.songs[playlistName])) {
           playlist += `<span class="song">
             <li>Title: ${value.title}</li><ul>
             <li>Artist: ${value.artist}</li>
@@ -70,7 +72,12 @@ const postData = async (songForm) => {
   const artist = songForm.querySelector('#artistField').value;
   const songLink = songForm.querySelector('#linkField').value;
 
-  const data = `title=${title}&artist=${artist}&link=${songLink}`;
+  const playlist =
+    document.querySelector("#nameField") ?
+      document.querySelector("#nameField").value :
+      document.querySelector("#existingPlaylistsSelect").value;
+
+  const data = `title=${title}&artist=${artist}&link=${songLink}&playlistName=${playlist}`;
 
   const response = await fetch(url, {
     method,
@@ -122,7 +129,7 @@ const init = () => {
   const existingPlaylistButton = document.querySelector("#existingPlaylist");
 
   newPlaylistButton.addEventListener('change', (e) => {
-    if(newPlaylistButton.checked) {
+    if (newPlaylistButton.checked) {
       const textField = ` <label for="playlistName">Playlist Name: </label>
                           <input id="nameField" type="text" name="playlistName" />`;
       document.querySelector("#newPlaylistName").innerHTML += textField;
@@ -132,7 +139,7 @@ const init = () => {
   });
 
   existingPlaylistButton.addEventListener('change', (e) => {
-    if(existingPlaylistButton.checked) {
+    if (existingPlaylistButton.checked) {
       document.querySelector("#newPlaylistName").innerHTML = "";
 
       const dropdownFields = getAllPlaylists();
