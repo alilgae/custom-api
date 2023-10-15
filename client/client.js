@@ -23,22 +23,22 @@ const handleResponse = (response, method) => {
       break;
   }
 
-  const playlistName = document.querySelector("#getPlaylists").value;
 
   //if we have a body to parse
   if (method !== 'head' && response.status !== 204) {
     //display actual data we're getting
     response.json().then(obj => {
-      if (obj.songs) { console.log(obj.songs);
-        let playlist = "<ol>";
-        for (const [key, value] of Object.entries(obj.songs[playlistName])) {
-          playlist += `<span class="song">
+      if (obj.songs) {
+        const playlistName = document.querySelector("#getPlaylists").value;
+        let playlistOutput = `<h3>Playlist: ${playlistName}</h3><ol>`;
+        for (const [key, value] of Object.entries(obj.songs)) {
+          playlistOutput += `<span class="song">
             <li>Title: ${value.title}</li><ul>
             <li>Artist: ${value.artist}</li>
             <li>Link: ${value.link}</li></ul></span>`;
         }
-        playlist += "</ol>";
-        content.innerHTML += playlist;
+        playlistOutput += "</ol>";
+        content.innerHTML += playlistOutput;
       }
       else if (obj.message) content.innerHTML += `<p>${obj.message}</p>`;
       else content.innerHTML += `<p>${JSON.stringify(obj)}</p>`
@@ -52,7 +52,8 @@ const requestData = async (playlistForm) => {
   const method = 'GET';
 
   //what url they're looking for
-  const url = '/getPlaylist';
+  const url = `${playlistForm.action}?playlistName=${document.querySelector("#getPlaylists").value}`;
+  console.log(url);
 
   const response = await fetch(url, { method }); //we know data will be there since we're waiting for it
 
@@ -77,6 +78,8 @@ const postData = async (songForm) => {
       document.querySelector("#nameField").value :
       document.querySelector("#existingPlaylistsSelect").value;
 
+  console.log(playlist);
+
   const data = `title=${title}&artist=${artist}&link=${songLink}&playlistName=${playlist}`;
 
   const response = await fetch(url, {
@@ -93,6 +96,8 @@ const postData = async (songForm) => {
 };
 
 const getAllPlaylists = () => {
+  
+  
   //dummy return value
   return `<option value="fall out boy">Fall Out Boy</option>`;
 }

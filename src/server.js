@@ -59,6 +59,12 @@ const onRequest = (request, response) => {
   }
 
   if (urlStruct[parsedUrl.pathname]) {
+    if(parsedUrl.pathname === '/getPlaylist') {
+      let playlistName = parsedUrl.query;
+      playlistName = query.parse(playlistName).playlistName;
+      return urlStruct[parsedUrl.pathname](request, response, playlistName);
+    }
+    
     return urlStruct[parsedUrl.pathname](request, response);
   }
 

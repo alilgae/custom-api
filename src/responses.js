@@ -11,8 +11,9 @@ const respondJSON = (request, response, status, obj) => {
   response.end();
 };
 
-const getAllSongs = (request, response, playlist = songs) => {
-  const obj = { songs: playlist };
+const getAllSongs = (request, response, playlist) => {
+  const obj = { songs: songs[playlist] };
+  console.log(obj);
   return respondJSON(request, response, 200, obj);
 };
 
@@ -23,7 +24,6 @@ const updatePlaylist = (request, response, body) => {
     message: `${body.title} by ${body.artist} has been successfully added to your playlist.`,
   };
 
-  console.log(body);
   if (!body.title || !body.artist || !body.link) {
     obj.message = 'All fields required';
     obj.id = 'missingParams';
@@ -53,8 +53,6 @@ const updatePlaylist = (request, response, body) => {
   currentSong.title = body.title;
   currentSong.artist = body.artist;
   currentSong.link = body.link;
-
-  console.log(songs);
 
   return respondJSON(request, response, statusCode, obj);
 };
