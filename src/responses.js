@@ -11,10 +11,17 @@ const respondJSON = (request, response, status, obj) => {
   response.end();
 };
 
-const getAllSongs = (request, response, playlist) => {
-  const obj = { songs: songs[playlist] };
-  console.log(obj);
+const getAllSongs = (request, response, playlist = null) => {
+  const obj = playlist ? { songs: songs[playlist] } : { songs };
   return respondJSON(request, response, 200, obj);
+};
+
+const getAllPlaylists = (request, response) => {
+  const obj = { playlists: [] };
+  for (const [key, value] of Object.entries(songs)) {
+    obj.playlists.push(key);
+  }
+  return respondJSON(request, response, 200, obj.playlists);
 };
 
 // body - the request itself
@@ -30,26 +37,35 @@ const updatePlaylist = (request, response, body) => {
     return respondJSON(request, response, 400, obj);
   }
 
-  let statusCode = 204; // update don't create new one
-
-  if(!body.playlistName) {
-    body.playlistName = "test";
+  if (body.playlistName == '') {
+    obj.message = 'Invalid Playlist <br>Please create new playlist';
+    obj.id = 'invalidPlaylist';
+    return respondJSON(request, response, 400, obj);
   }
 
-  //create a new playlist if it doesn't exist
-  if (!songs[body.playlistName]) {
+  let statusCode = 204; // update don't create new one
+  let playlistName;
+
+  if (!body.playlistName) {
+    playlistName = 'placeholder';
+  } else {
+    playlistName = body.playlistName;
+  }
+
+  // create a new playlist if it doesn't exist
+  if (!songs[playlistName]) {
     statusCode = 201;
-    songs[body.playlistName] = {};
+    songs[playlistName] = {};
   }
 
   // create new song if it doesn't exist
-  if (!songs[body.playlistName][body.title]) {
+  if (!songs[playlistName][body.title]) {
     statusCode = 201;
-    songs[body.playlistName][body.title] = {};
+    songs[playlistName][body.title] = {};
   }
 
   // update song
-  const currentSong = songs[body.playlistName][body.title];
+  const currentSong = songs[playlistName][body.title];
   currentSong.title = body.title;
   currentSong.artist = body.artist;
   currentSong.link = body.link;
@@ -69,6 +85,7 @@ const notFound = (request, response) => {
 
 module.exports = {
   getAllSongs,
+  getAllPlaylists,
   updatePlaylist,
   notFound,
 };

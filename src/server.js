@@ -11,6 +11,7 @@ const urlStruct = {
   '/style.css': html.getCSS,
   '/client.js': html.getJS,
   '/getPlaylist': responseHandler.getAllSongs,
+  '/getUserPlaylists': responseHandler.getAllPlaylists,
   notFound: responseHandler.notFound,
 };
 
@@ -59,12 +60,12 @@ const onRequest = (request, response) => {
   }
 
   if (urlStruct[parsedUrl.pathname]) {
-    if(parsedUrl.pathname === '/getPlaylist') {
+    if (parsedUrl.pathname === '/getPlaylist') {
       let playlistName = parsedUrl.query;
       playlistName = query.parse(playlistName).playlistName;
       return urlStruct[parsedUrl.pathname](request, response, playlistName);
     }
-    
+
     return urlStruct[parsedUrl.pathname](request, response);
   }
 

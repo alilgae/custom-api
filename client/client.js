@@ -1,4 +1,10 @@
-const handleResponse = (response, method) => {
+const createDropdown = (dropdownFields, dropdown) => {
+  if(!dropdownFields) dropdownFields = `<option value="">No Playlists Yet</option>`;
+  document.querySelector(dropdown).innerHTML = "";
+  document.querySelector(dropdown).innerHTML += dropdownFields;
+}
+
+const handleResponse = (response, method, url = null, dropdown = null) => {
   const content = document.querySelector("#content");
   //switch statement for each message type
   //for a head request, this is all we need 
@@ -23,11 +29,17 @@ const handleResponse = (response, method) => {
       break;
   }
 
-
   //if we have a body to parse
   if (method !== 'head' && response.status !== 204) {
     //display actual data we're getting
     response.json().then(obj => {
+      if(url === '/getUserPlaylists') {
+        let dropdownOptions = "";
+        for(const playlist of obj) {
+          dropdownOptions += `<option value='${playlist}'>${playlist}</option>`;
+        }
+       return createDropdown(dropdownOptions, dropdown);
+      }
       if (obj.songs) {
         const playlistName = document.querySelector("#getPlaylists").value;
         let playlistOutput = `<h3>Playlist: ${playlistName}</h3><ol>`;
@@ -41,7 +53,7 @@ const handleResponse = (response, method) => {
         content.innerHTML += playlistOutput;
       }
       else if (obj.message) content.innerHTML += `<p>${obj.message}</p>`;
-      else content.innerHTML += `<p>${JSON.stringify(obj)}</p>`
+      
     });
   }
 };
@@ -53,11 +65,10 @@ const requestData = async (playlistForm) => {
 
   //what url they're looking for
   const url = `${playlistForm.action}?playlistName=${document.querySelector("#getPlaylists").value}`;
-  console.log(url);
 
   const response = await fetch(url, { method }); //we know data will be there since we're waiting for it
 
-  handleResponse(response, method);
+  handleResponse(response, method, playlistForm.action);
 };
 
 //async means await keyword is somewhere in this function
@@ -78,8 +89,6 @@ const postData = async (songForm) => {
       document.querySelector("#nameField").value :
       document.querySelector("#existingPlaylistsSelect").value;
 
-  console.log(playlist);
-
   const data = `title=${title}&artist=${artist}&link=${songLink}&playlistName=${playlist}`;
 
   const response = await fetch(url, {
@@ -92,14 +101,18 @@ const postData = async (songForm) => {
 
   //we know data will be there since we're waiting for it
 
-  handleResponse(response, method);
+  handleResponse(response, method, url);
 };
 
-const getAllPlaylists = () => {
-  
-  
-  //dummy return value
-  return `<option value="fall out boy">Fall Out Boy</option>`;
+const getAllPlaylists = async (dropdown) => {
+  const method = 'GET';
+
+  //what url they're looking for
+  const url = `/getUserPlaylists`;
+
+  const response = await fetch(url, { method }); //we know data will be there since we're waiting for it
+
+  handleResponse(response, method, url, dropdown);
 }
 
 const init = () => {
@@ -126,6 +139,8 @@ const init = () => {
     //request handle
     postData(songForm);
 
+    getAllPlaylists("#getPlaylists");
+
     return false;
   });
 
@@ -147,16 +162,13 @@ const init = () => {
     if (existingPlaylistButton.checked) {
       document.querySelector("#newPlaylistName").innerHTML = "";
 
-      const dropdownFields = getAllPlaylists();
-      const dropdown = `<label for="playlists">Existing Playlists:</label>
-
-      <select name="playlists" id="existingPlaylistsSelect">
-        ${dropdownFields}
-      </select>`;
-      document.querySelector("#existingPlaylistDropdown").innerHTML = dropdown;
-
+      document.querySelector("#existingPlaylistDropdown").innerHTML += `<label for="playlists">Existing Playlists:</label> <select name="playlists" id="existingPlaylistsSelect"></select>`;
+      getAllPlaylists("#existingPlaylistsSelect");
+      
     }
-  })
+  });
+
+  getAllPlaylists("#getPlaylists");
 };
 
 window.onload = init;
