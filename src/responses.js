@@ -18,9 +18,7 @@ const getAllSongs = (request, response, playlist = null) => {
 
 const getAllPlaylists = (request, response) => {
   const obj = { playlists: [] };
-  for (const [key, value] of Object.entries(songs)) {
-    obj.playlists.push(key);
-  }
+  obj.playlists = Object.keys(songs);
   return respondJSON(request, response, 200, obj.playlists);
 };
 
@@ -37,7 +35,7 @@ const updatePlaylist = (request, response, body) => {
     return respondJSON(request, response, 400, obj);
   }
 
-  if (body.playlistName == '') {
+  if (body.playlistName === '' || !body.playlistName) {
     obj.message = 'Invalid Playlist <br>Please create new playlist';
     obj.id = 'invalidPlaylist';
     return respondJSON(request, response, 400, obj);
