@@ -24,7 +24,7 @@ const getAllPlaylists = (request, response) => {
 
 // body - the request itself
 const updatePlaylist = (request, response, body) => {
-  // assume missing fields
+  // assume they have all the fields
   const obj = {
     message: `${body.title} by ${body.artist} has been successfully added to your playlist.`,
   };

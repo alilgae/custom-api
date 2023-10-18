@@ -33,6 +33,7 @@ const handleResponse = (response, method, url = null, dropdown = null) => {
   if (method !== 'head' && response.status !== 204) {
     //display actual data we're getting
     response.json().then(obj => {
+      //create dropdown of all the playlists currently active 
       if(url === '/getUserPlaylists') {
         let dropdownOptions = "";
         for(const playlist of obj) {
@@ -40,6 +41,8 @@ const handleResponse = (response, method, url = null, dropdown = null) => {
         }
        return createDropdown(dropdownOptions, dropdown);
       }
+
+      //display the playlist requested 
       if (obj.songs) {
         const playlistName = document.querySelector("#getPlaylists").value;
         let playlistOutput = `<h3>Playlist: ${playlistName}</h3><ol>`;
@@ -52,6 +55,8 @@ const handleResponse = (response, method, url = null, dropdown = null) => {
         playlistOutput += "</ol>";
         content.innerHTML += playlistOutput;
       }
+
+      //show error message
       else if (obj.message) content.innerHTML += `<p>${obj.message}</p>`;
       
     });
