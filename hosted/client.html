@@ -10,9 +10,10 @@
 
 <body>
   <section id="top">
-    <h3>Song Playlist API</h3>
+    <h2>Song Playlist API</h2>
     <form id="songForm" action="/addSong" method="post">
 
+      <div id="radios">
       <!--multiple playlists: two radio buttons, new playlist with text field and existing playlist with dropdown-->
       <input type="radio" id="newPlaylist" name="playlist" value="new">
       <label for="newPlaylist">New Playlist</label>
@@ -21,7 +22,7 @@
 
       <input type="radio" id="existingPlaylist" name="playlist" value="existing">
       <label for="existingPlaylist">Existing Playlist</label>
-      <span id="existingPlaylistDropdown"></span>
+      <span id="existingPlaylistDropdown"></span></div>
       <br>
 
       <label for="title">Song Title: </label>

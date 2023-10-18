@@ -7,27 +7,27 @@ const createDropdown = (dropdownFields, dropdown) => {
 const handleResponse = (response, method, url = null, dropdown = null) => {
   const content = document.querySelector("#content");
   //switch statement for each message type
-  //for a head request, this is all we need 
+  if(url !== '/getUserPlaylists'){
   switch (response.status) {
     case 200:
-      content.innerHTML = `<b>Success</b>`;
+      //content.innerHTML = `<h3>Success</h3>`;
       break;
     case 201:
-      content.innerHTML = `<b>Song Uploaded</b>`;
+      content.innerHTML += `<h3>Song Uploaded</h3>`;
       break;
     case 204:
-      content.innerHTML = '<b>Song Updated</b>';
+      content.innerHTML += '<h3>Song Updated</h3>';
       break;
     case 400:
-      content.innerHTML = `<b>Bad Request</b>`;
+      content.innerHTML += `<h3>Bad Request</h3>`;
       break;
     case 404:
-      content.innerHTML = `<b>Resource Not Found</b>`;
+      content.innerHTML += `<h3>Resource Not Found</h3>`;
       break;
     default:
-      content.innerHTML = `Error code not implemented by client.`;
+      content.innerHTML += `Error code not implemented by client.`;
       break;
-  }
+  }}
 
   //if we have a body to parse
   if (method !== 'head' && response.status !== 204) {
@@ -118,10 +118,12 @@ const getAllPlaylists = async (dropdown) => {
 const init = () => {
   //get form
   const playlistForm = document.querySelector("#playlistForm");
+  const content = document.querySelector("#content");
 
   //on submit button press 
   playlistForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    content.innerHTML = "";
 
     //request handle
     requestData(playlistForm);
@@ -135,6 +137,8 @@ const init = () => {
   //on submit button press 
   songForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    content.innerHTML = "";
+
 
     //request handle
     postData(songForm);
@@ -150,7 +154,7 @@ const init = () => {
 
   newPlaylistButton.addEventListener('change', (e) => {
     if (newPlaylistButton.checked) {
-      const textField = ` <label for="playlistName">Playlist Name: </label>
+      const textField = ` <label for="playlistName">:</label>
                           <input id="nameField" type="text" name="playlistName" />`;
       document.querySelector("#newPlaylistName").innerHTML += textField;
 
@@ -162,7 +166,7 @@ const init = () => {
     if (existingPlaylistButton.checked) {
       document.querySelector("#newPlaylistName").innerHTML = "";
 
-      document.querySelector("#existingPlaylistDropdown").innerHTML += `<label for="playlists">Existing Playlists:</label> <select name="playlists" id="existingPlaylistsSelect"></select>`;
+      document.querySelector("#existingPlaylistDropdown").innerHTML += `<label for="playlists">:</label> <select name="playlists" id="existingPlaylistsSelect"></select>`;
       getAllPlaylists("#existingPlaylistsSelect");
       
     }

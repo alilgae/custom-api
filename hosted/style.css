@@ -1,25 +1,78 @@
-html, body {
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Tilt+Neon&display=swap');
+
+html{
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(160deg, grey, 30%, black);
+}
+body {
   height: 75%;
   width: 75%;
   margin: auto;
   padding: 0;
+  font-family: 'Tilt Neon', sans-serif;
+}
+
+input[type=submit], select {
+  font-family: 'Tilt Neon', sans-serif;
+  font-weight: bold;
+}
+
+input[type=text], select {
+  font-family: 'Patrick Hand', sans-serif;
 }
 
 #top {
   text-align: center;
   margin: 0 auto;
+  margin-top: 10px;
+  background-color: #a5a5a5b2;
+  width: fit-content;
+  padding: 1rem;
+  border-radius: 25px;
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 8px 15px 0 rgba(0, 0, 0, 0.19);
+
 }
 
-#top h1 {
+#top h2 {
   font-size: 2em;
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 #content {
-  margin-top: 100px;
+  margin-top: 50px;
   font-size: 2em;
   text-align: center;
+  background-color: #a5a5a5b2;
+  border-radius: 25px;
 }
 
 .song {
   text-align: left;
+}
+
+h1, h2, h3{ 
+  color: #1ED760; 
+}
+
+input[type=radio] {
+  accent-color: #1ED760;
+  transform: scale(1.5);
+}
+
+#radios {
+  text-align: left;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+content>h3 { padding: 2rem;}
+content>ol, content>p { padding: 1rem;}
+
+ol{
+  display: flex;
+  flex-flow: column wrap;
+  height: 50vh;
+  align-content: space-around;
 }
